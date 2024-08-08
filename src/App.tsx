@@ -1,24 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Select, Col, Row, Button } from 'antd';
+import useLanguage from './Hook/useLanguage';
+import useChangePage from './Hook/useChangePage';
+import { Test1 } from './pages/Test1';
+import { Test2 } from './pages/Test2';
+import { Home } from './pages/Home';
 
 function App() {
+  const { lang , changeLanguage, t } = useLanguage();
+  const { pages, changePage } = useChangePage();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='gradient-background'>
+      <Row justify="space-between" align="middle">
+        <Col span={8} className='title'>
+          {pages === "test1" && t("title_test1")}
+          {pages === "test2" && t("title_test2")}
+        </Col>
+        <Col className='gridgrid-button-test'>
+          {pages !== "home" && <Button onClick={() => changePage("home")}>{t("home")}</Button>}
+        </Col>
+        <Col span={8}>
+          <Select
+              value={lang.value}
+              className='select-lang'
+              dropdownStyle={{ width: '100px' }}
+              onChange={changeLanguage}
+              options={[
+                {
+                  value: 'en',
+                  label: t("en"),
+                },
+                {
+                  value: 'th',
+                  label: t("th"),
+                },
+              ]}
+            />
+        </Col>
+      </Row>
+      <Row>
+        {pages === "home" && <Home/>}
+        {pages === "test1" && <Test1 />}
+        {pages === "test2" && <Test2 />}
+      </Row>
     </div>
   );
 }
